@@ -44,7 +44,7 @@ Options:
   ```
   
   ## Thank you
-  KHInsider-Downloader uses a modified version of ditashi's jsbeautifier-go.
+  KHInsider Downloader uses a modified version of ditashi's jsbeautifier-go.
   
   ## Disclaimer
 - I will not be responsible for how you use KHInsider Downloader.    
