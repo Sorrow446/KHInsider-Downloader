@@ -3,14 +3,14 @@ KHInsider downloader written in Go.
 ![](https://i.imgur.com/4IRZAJq.png)
 [Windows, Linux, macOS, and Android binaries](https://github.com/Sorrow446/KHInsider-Downloader/releases)
 
-# Setup
+## Setup
 |Option|Info|
 | --- | --- |
 |format|Track download quality. 1 = MP3, 2 = Opus, 3 = AAC/ALAC, 4 = best available / FLAC.
 |outPath|Where to download to. Path will be made if it doesn't already exist.
 |diskNumPrefix|Prefix for disk folders. Ex: `Disk `, `CD `.
 
-# Usage
+## Usage
 Args take priority over the config file.
 
 Download a single album:   
@@ -42,7 +42,10 @@ Options:
   --help, -h             display this help and exit
   ```
   
-  # Disclaimer
+  ## Thank you
+  KHInsider-Downloader uses a modified version of ditashi's jsbeautifier-go.
+  
+  ## Disclaimer
 - I will not be responsible for how you use KHInsider Downloader.    
 - KHInsider brand and name is the registered trademark of its respective owner.    
 - KHInsider Downloader has no partnership, sponsorship or endorsement with KHInsider.
