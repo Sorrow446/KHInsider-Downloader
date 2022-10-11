@@ -1,5 +1,6 @@
 # KHInsider-Downloader
-KHInsider downloader written in Go. Other downloaders already exist, but they're either broken or only support MP3.
+KHInsider downloader written in Go.    
+Other downloaders already exist, but they're either broken or only support MP3.
 ![](https://i.imgur.com/4IRZAJq.png)
 [Windows, Linux, macOS, and Android binaries](https://github.com/Sorrow446/KHInsider-Downloader/releases)
 
