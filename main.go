@@ -30,7 +30,7 @@ const (
 	tracksArrayRegexStr = `tracks=(\[(?:{"track":\d+,"name":"[^"]+","le`+
 		`ngth":"\d+:\d+","file":"[^"]+"},)+])`
 	urlRegexStr 		= `^https://downloads.khinsider.com/game-soundtracks/al`+
-		`bum/([a-z0-9.]+(?:-[a-z0-9.]+)+)$`
+		`bum/([a-z0-9]+(?:-[a-z0-9]+)*)$`
 	trackUrlBase 		=  "https://vgmsite.com/soundtracks/"
 	sanRegexStr 		= `[\/:*?"><|]`
 )
