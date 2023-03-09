@@ -27,7 +27,7 @@ import (
 const (
 	userAgent 			= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKi"+
 		"t/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
-	tracksArrayRegexStr = `tracks=(\[(?:{"track":\d+,"name":"[^"]+","le`+
+	tracksArrayRegexStr = `tracks=(\[(?:{"track":\d+,"name":"(?:[^"]+|)","le`+
 		`ngth":"\d+:\d+","file":"[^"]+"},)+])`
 	urlRegexStr 		= `^https://downloads.khinsider.com/game-soundtracks/al`+
 		`bum/([a-z0-9]+(?:-[a-z0-9]+)*)$`
@@ -298,7 +298,6 @@ func extractMeta(_url, slug string) (*Meta, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	regex := regexp.MustCompile(tracksArrayRegexStr)
 	match := regex.FindStringSubmatch(*unpackedCode)
 	tracksArrayStr := tracksArrayReplacer.Replace(match[1])
@@ -321,6 +320,9 @@ func extractMeta(_url, slug string) (*Meta, error) {
 		fname, err := getFname(track.File)
 		if err != nil {
 			return nil, err
+		}
+		if meta.Tracks[i].Name == "" {
+			meta.Tracks[i].Name = "Track " + strconv.Itoa(i+1)
 		}
 		meta.Tracks[i].Fname = fname
 		meta.Tracks[i].File = trackUrlBase+ slug +"/"+ track.File[:len(track.File)-3]
