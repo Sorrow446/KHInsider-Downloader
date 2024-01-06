@@ -30,8 +30,7 @@ const (
 	tracksArrayRegexStr = `tracks=(\[(?:{"track":\d+,"name":"(?:[^"]+|)","le`+
 		`ngth":"\d+:\d+","file":"[^"]+"},)+])`
 	urlRegexStr 		= `^https://downloads.khinsider.com/game-soundtracks/al`+
-		`bum/([a-z0-9]+(?:-[a-z0-9]+)*)$`
-	trackUrlBase 		=  "https://vgmsite.com/soundtracks/"
+		`bum/[a-z0-9]+(?:-[a-z0-9]+)*$`
 	sanRegexStr 		= `[\/:*?"><|]`
 )
 
@@ -235,13 +234,9 @@ func makeDirs(path string) error {
 	return err
 }
 
-func checkUrl(_url string) string {
-	regex := regexp.MustCompile(urlRegexStr)
-	match := regex.FindStringSubmatch(_url)
-	if match == nil {
-		return ""
-	}
-	return match[1]
+func checkUrl(_url string) bool {
+	match := regexp.MustCompile(urlRegexStr).MatchString(_url)
+	return match
 }
 
 func getDocument(_url string) (*goquery.Document, error) {
@@ -282,7 +277,7 @@ func getFname(file string) (string, error) {
 	return sanitise(dec[:lastIdx+1]), nil
 }
 
-func extractMeta(_url, slug string) (*Meta, error) {
+func extractMeta(_url string) (*Meta, error) {
 	doc, err := getDocument(_url)
 	if err != nil {
 		return nil, err
@@ -325,7 +320,7 @@ func extractMeta(_url, slug string) (*Meta, error) {
 			meta.Tracks[i].Name = "Track " + strconv.Itoa(i+1)
 		}
 		meta.Tracks[i].Fname = fname
-		meta.Tracks[i].File = trackUrlBase+ slug +"/"+ track.File[:len(track.File)-3]
+		meta.Tracks[i].File = "https://"+ track.File[:len(track.File)-3]
 	}
 	meta.HasDisks = diskNum > 1
 
@@ -454,23 +449,23 @@ func main() {
 	}
 	cfg, err := parseCfg()
 	if err != nil {
-		handleErr("Failed to parse config/args.", err, true)
+		handleErr("failed to parse config/args", err, true)
 	}
 	err = makeDirs(cfg.OutPath)
 	if err != nil {
-		handleErr("Failed to make output folder.", err, true)
+		handleErr("failed to make output folder", err, true)
 	}
 
 	albumTotal := len(cfg.Urls)
 	for albumNum, _url := range cfg.Urls {
 		fmt.Printf("Album %d of %d:\n", albumNum+1, albumTotal)
-		slug := checkUrl(_url)
-		if slug == "" {
+		ok := checkUrl(_url)
+		if !ok {
 			fmt.Println("Invalid URL:", _url)
 			continue
 		}
 
-		meta, err := extractMeta(_url, slug)
+		meta, err := extractMeta(_url)
 		if err != nil {
 			panic(err)
 		}
@@ -493,7 +488,7 @@ func main() {
 			exists, err := fileExists(trackPath)
 			if err != nil {
 				handleErr(
-					"Failed to check if track already exists locally.", err, false)
+					"failed to check if track already exists locally", err, false)
 				continue
 			}
 			if exists {
@@ -503,7 +498,7 @@ func main() {
 
 			err = makeDirs(_albumFolder)
 			if err != nil {
-				handleErr("Failed to make album output path.", err, false)
+				handleErr("failed to make album output path", err, false)
 				continue
 			}
 
@@ -513,7 +508,7 @@ func main() {
 			)
 			err = downloadTrack(trackPath, track.File + lowerChosenFmt)
 			if err != nil {
-				handleErr("Failed to download track.", err, false)
+				handleErr("failed to download track", err, false)
 			}
 		}
 	}
